@@ -31,7 +31,6 @@ void AFpsCharacter::Tick(float DeltaTime)
 
 }
 
-// Called to bind functionality to input
 void AFpsCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -64,7 +63,7 @@ FHitResult AFpsCharacter::Trace()
 			FString::Printf(TEXT("Hit component: %s"), *Component->GetName()),
 			OutHit.Actor.Get(),
 			FColor::Blue,
-			1.0f
+			0.3f
 		);
 
 		return OutHit;
@@ -80,7 +79,6 @@ void AFpsCharacter::Interact()
 		
 	if (HitActor)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Interact traced actor %s"), *HitActor->GetName())
 		HitActor->Interact();
 	}
 }
@@ -89,6 +87,6 @@ void AFpsCharacter::MoveRight(float Value)
 {
 	if (Value)
 	{
-		AddMovementInput(GetActorRightVector(), Value * GetWorld()->GetTimeSeconds() * 2);
+		AddMovementInput(GetActorRightVector(), Value * GetWorld()->GetTimeSeconds() * MovementSpeed);
 	}
 }
