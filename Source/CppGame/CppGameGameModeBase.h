@@ -28,9 +28,6 @@ public:
 	float ObstacleSpawnDistance{500};
 
 	UPROPERTY(EditAnywhere, Category = "Obstacles")
-	FVector ObstacleSpawnLocation;
-
-	UPROPERTY(EditAnywhere, Category = "Obstacles")
 	TSubclassOf<AInteractableActor> ObstacleClassToSpawn;
 	
 	virtual void BeginPlay() override;
