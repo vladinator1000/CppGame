@@ -14,7 +14,9 @@ AFpsCharacter::AFpsCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	AbilitySystemComponent = CreateDefaultSubobject<UCppAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AttributeSet = CreateDefaultSubobject<UCppAttributeSet>(TEXT("AttributeSet"));
+	
 }
 
 // Called when the game starts or when spawned
@@ -40,25 +42,30 @@ void AFpsCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFpsCharacter::MoveRight);
 }
 
+UCppAbilitySystemComponent* AFpsCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
 
 FHitResult AFpsCharacter::Trace()
 {
-	FVector TraceStart = GetActorLocation();
-	FVector TraceEnd = GetActorForwardVector() * TraceRange;
-	UWorld* world = GetWorld();
+	auto TraceStart = GetActorLocation();
+	auto TraceEnd = GetActorForwardVector() * TraceRange;
+	auto World = GetWorld();
 	
 
 	FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(instantShot), false, Instigator);
 	FHitResult OutHit;
 	
-	DrawDebugLine(world, TraceStart, TraceEnd, FColor::Blue, false, 1.0f);
-	if (world->LineTraceSingleByChannel(OutHit, TraceStart, TraceEnd, ECC_Visibility, TraceParams))
+	DrawDebugLine(World, TraceStart, TraceEnd, FColor::Blue, false, 1.0f);
+	if (World->LineTraceSingleByChannel(OutHit, TraceStart, TraceEnd, ECC_Visibility, TraceParams))
 	{
 		UPrimitiveComponent* Component = OutHit.Component.Get();
 		
 		DrawDebugString
 		(
-			world,
+			World,
 			OutHit.Location,
 			FString::Printf(TEXT("Hit component: %s"), *Component->GetName()),
 			OutHit.Actor.Get(),
@@ -83,7 +90,7 @@ void AFpsCharacter::Interact()
 	}
 }
 
-void AFpsCharacter::MoveRight(float Value)
+void AFpsCharacter::MoveRight(const float Value)
 {
 	if (Value)
 	{

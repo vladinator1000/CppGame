@@ -16,16 +16,15 @@ class CPPGAME_API ACppGameGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
-private:
-	FTimerHandle SpawnObstacleTimerHandle;
-	AFpsCharacter* Character;
-
 public:
 	UPROPERTY(EditAnywhere, Category = "Obstacles")
-	float ObstacleSpawnInterval{1};
+	float ObstacleSpawnInterval{1.0f};
 
 	UPROPERTY(EditAnywhere, Category = "Obstacles")
-	float ObstacleSpawnDistance{500};
+	float ObstacleSpawnSpeedIncreaseFactor{2.0f};
+
+	UPROPERTY(EditAnywhere, Category = "Obstacles")
+	FVector ObstacleSpawnDistance{500.0f, 100.0f, 50.0f};
 
 	UPROPERTY(EditAnywhere, Category = "Obstacles")
 	TSubclassOf<AInteractableActor> ObstacleClassToSpawn;
@@ -33,4 +32,10 @@ public:
 	virtual void BeginPlay() override;
 
 	void SpawnObstacles();
+
+private:
+	FTimerHandle SpawnObstacleTimerHandle;
+	FTimerHandle IncreaseSpawnSpeedTimerHandle;
+	AFpsCharacter* Character;
+	void IncreaseSpawnSpeed();
 };
